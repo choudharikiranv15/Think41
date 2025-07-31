@@ -1,0 +1,4 @@
+node_modules/
+uploads/
+think41.db
+.env
