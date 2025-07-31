@@ -5,14 +5,9 @@ const router = express.Router();
 
 // List all departments, with product count
 router.get('/departments', (req, res) => {
-    db.all('SELECT * FROM departments', (err, rows) => {
-      if (err) {
-        console.error('Error fetching departments:', err);
-        return res.status(500).json({ error: err.message });
-      }
-      res.json({ departments: rows });
-    });
+    res.json({ msg: "Hello, department test!" });
   });
+  
   
   
 
