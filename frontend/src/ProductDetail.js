@@ -1,52 +1,40 @@
 // src/ProductDetail.js
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { Paper, Typography, Divider, CircularProgress, Button } from "@mui/material";
 
 function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    setLoading(true);
-    setError(null);
-    fetch(`http://localhost:3000/api/products/${id}`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`Error ${res.status}`);
-        }
-        return res.json();
-      })
-      .then((data) => {
+    fetch(`/api/products/${id}`)
+      .then(res => res.json())
+      .then(data => {
         setProduct(data.product);
         setLoading(false);
       })
-      .catch((error) => {
-        setError("Product not found or error fetching product.");
-        setLoading(false);
-      });
+      .catch(() => setLoading(false));
   }, [id]);
 
-  if (loading) return <div>Loading product...</div>;
-  if (error) return (
-    <div>
-      <p>{error}</p>
-      <Link to="/">← Back to Products</Link>
-    </div>
-  );
+  if (loading) return <div style={{ display:"flex", justifyContent:"center" }}><CircularProgress /></div>;
+  if (!product) return <Typography>Product not found</Typography>;
 
   return (
-    <div style={{ padding: 20 }}>
-      <Link to="/">← Back to Products</Link>
-      <h2>{product.name}</h2>
-      <div><b>Brand:</b> {product.brand}</div>
-      <div><b>Category:</b> {product.category}</div>
-      <div><b>Retail Price:</b> ${product.retail_price}</div>
-      <div><b>Cost:</b> ${product.cost}</div>
-      <div><b>Department:</b> {product.department}</div>
-      <div><b>SKU:</b> {product.sku}</div>
-      <div><b>Distribution Center ID:</b> {product.distribution_center_id}</div>
+    <div style={{ maxWidth: 600, margin: "32px auto", padding: "0 16px" }}>
+      <Button variant="text" component={Link} to="/">← Back to Products</Button>
+      <Paper elevation={3} sx={{ padding: 3 }}>
+        <Typography variant="h5" gutterBottom>{product.name}</Typography>
+        <Divider sx={{ marginBottom: 2 }} />
+        <Typography><b>Brand:</b> {product.brand}</Typography>
+        <Typography><b>Category:</b> {product.category}</Typography>
+        <Typography><b>Retail Price:</b> ${product.retail_price}</Typography>
+        <Typography><b>Cost:</b> ${product.cost}</Typography>
+        <Typography><b>Department:</b> {product.department_name}</Typography>
+        <Typography><b>SKU:</b> {product.sku}</Typography>
+        <Typography><b>Distribution Center ID:</b> {product.distribution_center_id}</Typography>
+      </Paper>
     </div>
   );
 }
