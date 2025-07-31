@@ -26,6 +26,8 @@ app.get('*', (req, res) => {
   }
   // For /api routes, let the previous handlers work!
 });
+const departmentsRouter = require('./routes/departments');
+app.use('/api', departmentsRouter);
 
 const PORT = 3000;
 app.listen(PORT, () => {
