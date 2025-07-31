@@ -13,3 +13,6 @@ const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
+
+const productsRouter = require('./routes/products');
+app.use('/api', productsRouter);
